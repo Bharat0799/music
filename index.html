@@ -1,66 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="cyber-neon">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f0f1a" />
-  <title>AI Pulse Player</title>
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <title>Aurora Player</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-glow glow-cyan" aria-hidden="true"></div>
-  <div class="bg-glow glow-purple" aria-hidden="true"></div>
+  <div class="bg-shape s1" aria-hidden="true"></div>
+  <div class="bg-shape s2" aria-hidden="true"></div>
+  <div class="bg-shape s3" aria-hidden="true"></div>
 
-  <header class="topbar glass">
-    <div class="profile-row">
-      <label for="profileSelect">Profile</label>
-      <select id="profileSelect"></select>
-      <input id="profileName" type="text" placeholder="New profile" />
-      <button id="createProfileBtn" class="ghost-btn" type="button">Create</button>
-    </div>
-    <div class="topbar-actions">
-      <select id="themeSelect" aria-label="Theme">
-        <option value="cyber-neon">Cyber Neon</option>
-        <option value="hologram">Hologram</option>
-        <option value="matrix">Matrix</option>
-      </select>
-      <button id="syncPushBtn" class="ghost-btn" type="button">Cloud Push</button>
-      <button id="syncPullBtn" class="ghost-btn" type="button">Cloud Pull</button>
-      <button id="voiceBtn" class="ghost-btn" type="button">Voice</button>
-      <button id="shortcutsBtn" class="ghost-btn" type="button">Shortcuts</button>
-    </div>
-  </header>
+  <main class="app-shell">
+    <section class="player-card" id="playerCard" aria-label="Music Player">
+      <div class="top-row">
+        <p class="eyebrow">AURORA PLAYER</p>
+        <button id="themeToggle" type="button" class="glass-btn small">Pastel Mode</button>
+      </div>
 
-  <main class="app-grid">
-    <section class="player-panel glass">
-      <p class="eyebrow">AI Audio Module</p>
-
-      <div class="cover-ring skeleton-cover" id="coverShell">
+      <div class="cover-stage">
         <img id="coverImage" src="" alt="Album cover" />
       </div>
 
-      <h1 id="songTitle" class="skeleton-line">Loading...</h1>
-      <p id="songArtist" class="skeleton-line">Artist</p>
-      <p id="trackMeta" class="track-meta">BPM: -- | Key: --</p>
+      <h1 id="songTitle">Loading...</h1>
+      <p id="songArtist">Artist</p>
 
-      <div class="feedback-row">
-        <button id="likeBtn" class="ghost-btn" type="button">Like</button>
-        <button id="dislikeBtn" class="ghost-btn" type="button">Dislike</button>
-      </div>
+      <audio id="audio" crossorigin="anonymous"></audio>
+      <canvas id="visualizer" width="700" height="110" aria-label="Audio visualizer"></canvas>
 
-      <audio id="deckA" crossorigin="anonymous"></audio>
-      <audio id="deckB" crossorigin="anonymous"></audio>
-
-      <canvas id="visualizer" width="720" height="120" aria-label="Audio equalizer"></canvas>
-      <canvas id="waveform" width="720" height="120" aria-label="Waveform timeline"></canvas>
-
-      <div class="progress-section">
+      <div class="progress-wrap">
         <input id="progressBar" type="range" min="0" max="100" value="0" step="0.1" />
         <div class="time-row">
           <span id="currentTime">00:00</span>
@@ -69,39 +40,21 @@
       </div>
 
       <div class="controls">
-        <button id="prevBtn" class="control-btn" type="button" aria-label="Previous">&#9198;</button>
-        <button id="playBtn" class="control-btn play-btn" type="button" aria-label="Play/Pause">&#9654;</button>
-        <button id="nextBtn" class="control-btn" type="button" aria-label="Next">&#9197;</button>
+        <button id="prevBtn" type="button" class="glass-btn control">&#9198;</button>
+        <button id="playBtn" type="button" class="glass-btn control play">&#9654;</button>
+        <button id="nextBtn" type="button" class="glass-btn control">&#9197;</button>
       </div>
 
-      <div class="settings-grid">
-        <div class="volume-section">
-          <label for="volumeBar">Volume</label>
-          <input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.8" />
-        </div>
-        <div class="eq-section">
-          <label for="eqPreset">EQ Preset</label>
-          <select id="eqPreset">
-            <option value="flat">Flat</option>
-            <option value="bass">Bass Boost</option>
-            <option value="vocal">Vocal</option>
-            <option value="chill">Chill</option>
-          </select>
-        </div>
+      <div class="volume-wrap">
+        <label for="volumeBar">Volume</label>
+        <input id="volumeBar" type="range" min="0" max="1" step="0.01" value="0.8" />
       </div>
     </section>
 
-    <section class="playlist-panel glass">
-      <div class="panel-head">
+    <aside class="playlist-card">
+      <div class="playlist-head">
         <h2>Playlist</h2>
         <span id="trackCount">0 tracks</span>
-      </div>
-
-      <div class="mood-row">
-        <button class="mood-btn active" type="button" data-mood="all">All</button>
-        <button class="mood-btn" type="button" data-mood="focus">Focus</button>
-        <button class="mood-btn" type="button" data-mood="hype">Hype</button>
-        <button class="mood-btn" type="button" data-mood="calm">Calm</button>
       </div>
 
       <div id="dropZone" class="drop-zone" tabindex="0">
@@ -110,88 +63,9 @@
       <input id="fileInput" type="file" accept="audio/mpeg,audio/mp3" multiple />
 
       <ul id="playlist"></ul>
-      <p id="playlistEmpty" class="empty-state hidden">No tracks in this mood yet.</p>
-    </section>
-
-    <section class="queue-panel glass">
-      <div class="panel-head">
-        <h2>Up Next Queue</h2>
-        <button id="clearQueueBtn" class="ghost-btn" type="button">Clear</button>
-      </div>
-      <ul id="queueList" tabindex="0"></ul>
-      <p id="queueEmpty" class="empty-state">Queue is empty.</p>
-    </section>
-
-    <section class="lyrics-panel glass">
-      <div class="panel-head">
-        <h2>Lyrics</h2>
-      </div>
-      <ul id="lyricsList"></ul>
-      <p id="lyricsEmpty" class="empty-state">No lyrics for this track.</p>
-    </section>
-
-    <section class="reco-panel glass">
-      <div class="panel-head">
-        <h2>AI Recommendations</h2>
-      </div>
-      <ul id="recommendList"></ul>
-      <p id="recommendEmpty" class="empty-state">No recommendations yet.</p>
-    </section>
-
-    <section class="engine-panel glass">
-      <div class="panel-head"><h2>Audio Engine</h2></div>
-      <div id="eqBands" class="eq-bands"></div>
-      <div class="engine-row">
-        <label for="reverbBar">Reverb</label>
-        <input id="reverbBar" type="range" min="0" max="1" step="0.01" value="0.2" />
-      </div>
-      <div class="engine-row">
-        <label for="widthBar">Stereo Width</label>
-        <input id="widthBar" type="range" min="0" max="1" step="0.01" value="0.5" />
-      </div>
-    </section>
-
-    <section class="analytics-panel glass">
-      <div class="panel-head"><h2>Analytics</h2></div>
-      <ul id="metricsList"></ul>
-    </section>
+      <p id="playlistEmpty" class="hidden">No tracks yet.</p>
+    </aside>
   </main>
-
-  <footer class="mini-player glass" id="miniPlayer">
-    <img id="miniCover" src="" alt="mini cover" />
-    <div class="mini-meta">
-      <strong id="miniTitle">Track</strong>
-      <span id="miniArtist">Artist</span>
-      <small id="voiceStatus">Voice: idle</small>
-    </div>
-    <div class="mini-controls">
-      <button id="miniPrev" class="control-btn" type="button" aria-label="Mini previous">&#9198;</button>
-      <button id="miniPlay" class="control-btn play-btn" type="button" aria-label="Mini play">&#9654;</button>
-      <button id="miniNext" class="control-btn" type="button" aria-label="Mini next">&#9197;</button>
-    </div>
-  </footer>
-
-  <div id="contextMenu" class="context-menu hidden">
-    <button id="ctxPlayNow" type="button">Play Now</button>
-    <button id="ctxPlayNext" type="button">Play Next</button>
-    <button id="ctxAddQueue" type="button">Add To Queue</button>
-  </div>
-
-  <div id="toast" class="toast hidden"></div>
-
-  <dialog id="shortcutsDialog" class="shortcuts-dialog">
-    <h3>Keyboard Shortcuts</h3>
-    <ul>
-      <li>Space: Play/Pause</li>
-      <li>Arrow Left/Right: Seek -/+5s</li>
-      <li>N: Next track</li>
-      <li>P: Previous track</li>
-      <li>Q: Focus queue</li>
-      <li>L / D: Like / Dislike current track</li>
-      <li>Esc: Close menus</li>
-    </ul>
-    <button id="closeShortcuts" class="ghost-btn" type="button">Close</button>
-  </dialog>
 
   <script src="script.js"></script>
 </body>
